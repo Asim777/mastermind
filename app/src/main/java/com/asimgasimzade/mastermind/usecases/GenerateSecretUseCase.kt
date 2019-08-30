@@ -11,7 +11,7 @@ import kotlin.random.Random
 class GenerateSecretUseCase @Inject constructor() {
     fun execute(areDuplicatesAllowed: Boolean) = Single.just(
         if (areDuplicatesAllowed) {
-            (1..4).map {
+            Array(4) {
                 CodePeg(
                     CodePegColor.values()[Random.nextInt(8)]
                 )
@@ -21,7 +21,7 @@ class GenerateSecretUseCase @Inject constructor() {
                 CodePeg(
                     CodePegColor.values()[it]
                 )
-            }.shuffled().take(4)
+            }.shuffled().take(4).toTypedArray()
         }
     )
 }

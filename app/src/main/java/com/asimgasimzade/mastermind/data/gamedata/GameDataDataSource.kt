@@ -6,6 +6,8 @@ import io.reactivex.Single
 
 @Reusable
 interface GameDataDataSource {
-    fun get(): Single<GameData?>
-    fun save(gameData: GameData)
+    fun getGameData(): Single<GameData?>
+    fun saveGameData(gameData: GameData)
+    fun getIsNewGame(): Single<Boolean>
+    fun setIsNewGame(isNewGame: Boolean)
 }

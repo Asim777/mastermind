@@ -15,7 +15,7 @@ import org.mockito.junit.MockitoJUnit
 @RunWith(Parameterized::class)
 class EvaluateGuessUseCaseTest(
     private val guessHint: GuessHintModel,
-    private val secret: List<CodePeg>,
+    private val secret: Array<CodePeg>,
     private val expected: GuessHintModel
 ) {
     @Mock
@@ -180,7 +180,7 @@ class EvaluateGuessUseCaseTest(
     fun `Given guess and secret when execute then return hint`() {
         // Given
         given { areColorInRightPositionUseCase.execute(guessHint, secret) }.willReturn(
-            List(4) {
+            Array(4) {
                 secret[it].color == guessHint.guess[it].color
             }
         )
@@ -196,7 +196,7 @@ class EvaluateGuessUseCaseTest(
     fun `Given correct guess and secret when execute then updates isGuessCorrect with true`() {
         // Given
         given { areColorInRightPositionUseCase.execute(guessHint, secret) }.willReturn(
-            List(4) {
+            Array(4) {
                 secret[it].color == guessHint.guess[it].color
             }
         )

@@ -24,7 +24,7 @@ class SaveGameDataUseCaseTest {
     fun `Given gameData when execute then save gameData to local repository with no errors`() {
         // Given
         val gameData = GameData(
-            secret = MutableList(4) {
+            secret = Array(4) {
                 CodePeg(CodePegColor.values()[it])
             },
             numberOfGuesses = 10,

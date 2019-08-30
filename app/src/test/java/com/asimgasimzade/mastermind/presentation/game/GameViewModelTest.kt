@@ -34,6 +34,15 @@ class GameViewModelTest {
     @Mock
     lateinit var evaluateGuessUseCase: EvaluateGuessUseCase
 
+    @Mock
+    lateinit var setupGameUseCase: SetupGameUseCase
+
+    @Mock
+    lateinit var getIsNewGameUseCase: GetIsNewGameUseCase
+
+    @Mock
+    lateinit var setIsNewGameUseCase: SetIsNewGameUseCase
+
     @Before
     fun setUp() {
         cut = GameViewModel(
@@ -43,7 +52,10 @@ class GameViewModelTest {
             generateSecretUseCase,
             getSavedGameDataUseCase,
             saveGameDataUseCase,
-            evaluateGuessUseCase
+            evaluateGuessUseCase,
+            setupGameUseCase,
+            getIsNewGameUseCase,
+            setIsNewGameUseCase
         )
     }
 
@@ -51,7 +63,7 @@ class GameViewModelTest {
     fun ` Given gameMode and gameSettings when setupGame then setupUi with correct gameModel`() {
         // Given
         val expectedGameModel = GameData(
-            secret = MutableList(4) {
+            secret = Array(4) {
                 CodePeg(CodePegColor.values()[it])
             },
             numberOfGuesses = 10,
@@ -88,7 +100,7 @@ class GameViewModelTest {
 
         val setupUiObserver = cut.setupUi().test()
 
-        // When
+        // Whend
         cut.onLoad(gameMode = GameMode.SINGLE_PLAYER)
 
         // Then

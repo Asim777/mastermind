@@ -16,3 +16,7 @@ enum class CodePegColor(val image: Int) {
     PINK(R.drawable.ic_pink_peg),
     EMPTY(R.drawable.ic_empty_peg)
 }
+
+fun get4EmptyPegs() = Array(4) {
+    CodePeg(CodePegColor.EMPTY)
+}

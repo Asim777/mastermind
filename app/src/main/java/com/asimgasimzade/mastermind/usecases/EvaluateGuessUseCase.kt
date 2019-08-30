@@ -11,7 +11,7 @@ import javax.inject.Inject
 class EvaluateGuessUseCase @Inject constructor(
     private val areColorsInRightPositionsUseCase: AreColorsInRightPositionsUseCase
 ) {
-    fun execute(guessHintModel: GuessHintModel, secret: List<CodePeg>): GuessHintModel {
+    fun execute(guessHintModel: GuessHintModel, secret: Array<CodePeg>): GuessHintModel {
         val hint = hashMapOf<CodePeg, KeyPeg>()
         val areGuessesInRightPositions = areColorsInRightPositionsUseCase.execute(
             guessHintModel,

@@ -30,11 +30,11 @@ interface GameViewModelOutputs : BaseViewModelOutputs {
     fun enableCheckButton(): Observable<Boolean>
     fun showWinDialog(): Observable<Unit>
     fun showLostDialog(): Observable<Unit>
-    fun updateSecretView(): Observable<List<CodePeg>>
+    fun updateSecretView(): Observable<Array<CodePeg>>
     fun showCodeMakerTurnDialog(): Observable<Unit>
     fun showCodeBreakerTurnDialog(): Observable<Unit>
-    fun setupUiForCodeMaker(): Observable<List<CodePeg>>
-    fun setupUiForCodeBreaker(): Observable<GameData>
+    fun setupUiForCodeMaker(): Observable<Array<CodePeg>>
+    fun setupUiForCodeBreaker(): Observable<Unit>
     fun removeDuplicatePegFromSecret(): Observable<Int>
 }
 
@@ -45,7 +45,10 @@ class GameViewModel @Inject constructor(
     private val generateSecretUseCase: GenerateSecretUseCase,
     private val getSavedGameDataUseCase: GetSavedGameDataUseCase,
     private val saveGameDataUseCase: SaveGameDataUseCase,
-    private val evaluateGuessUseCase: EvaluateGuessUseCase
+    private val evaluateGuessUseCase: EvaluateGuessUseCase,
+    private val setupGameUseCase: SetupGameUseCase,
+    private val getIsNewGameUseCase: GetIsNewGameUseCase,
+    private val setIsNewGameUseCase: SetIsNewGameUseCase
 ) : BaseViewModel(application, schedulerProvider),
     GameViewModelInputs,
     GameViewModelOutputs {
@@ -62,17 +65,16 @@ class GameViewModel @Inject constructor(
     private val enableActionButton = PublishSubject.create<Boolean>()
     private val showWinDialog = PublishSubject.create<Unit>()
     private val showLostDialog = PublishSubject.create<Unit>()
-    private val updateSecretView = PublishSubject.create<List<CodePeg>>()
+    private val updateSecretView = PublishSubject.create<Array<CodePeg>>()
     private val showCodeMakerTurnDialog = PublishSubject.create<Unit>()
     private val showCodeBreakerTurnDialog = PublishSubject.create<Unit>()
-    private val setupUiForCodeMaker = PublishSubject.create<List<CodePeg>>()
-    private val setupUiForCodeBreaker = PublishSubject.create<GameData>()
+    private val setupUiForCodeMaker = PublishSubject.create<Array<CodePeg>>()
+    private val setupUiForCodeBreaker = PublishSubject.create<Unit>()
     private val removeDuplicatePegFromSecret = PublishSubject.create<Int>()
 
     private lateinit var gameData: GameData
     private lateinit var gameSettings: GameSettings
-    private var isNewGame = false
-    private var currentSecret = Array(4) { CodePeg(CodePegColor.EMPTY) }
+    private var currentSecret = get4EmptyPegs()
 
     override fun onLoad(gameMode: GameMode) {
         getGameSettingsUseCase.execute()
@@ -80,7 +82,7 @@ class GameViewModel @Inject constructor(
             .compose(schedulerProvider.doOnIoObserveOnMainSingle())
             .subscribe({ settings ->
                 gameSettings = settings
-                if (!isNewGame) {
+                if (!getIsNewGameUseCase.execute().blockingGet()) {
                     continueSavedGame(gameMode)
                 } else {
                     setupNewGame(gameMode)
@@ -95,7 +97,10 @@ class GameViewModel @Inject constructor(
             .doFinally { refreshing.onNext(false) }
             .compose(schedulerProvider.doOnIoObserveOnMainSingle())
             .subscribe({ savedGameData ->
-                gameData = savedGameData ?: setupGame(gameMode, gameSettings)
+                gameData = savedGameData ?: setupGameUseCase.execute(
+                    gameMode,
+                    getSecret(gameMode, gameSettings)
+                ).blockingGet()
                 setupUi.onNext(gameData)
             }, {
                 Timber.d("Error while retrieving game data. ${it.printStackTrace()}")
@@ -141,7 +146,7 @@ class GameViewModel @Inject constructor(
 
     private fun handleActionButtonClickForCodeMaker() {
         updateSecretView.onNext(get4EmptyPegs())
-        gameData.secret = currentSecret.toList()
+        gameData.secret = currentSecret
     }
 
     private fun handleActionButtonClickForCodeBreaker() {
@@ -153,12 +158,12 @@ class GameViewModel @Inject constructor(
         if (guessHint.isGuessCorrect) {
             showWinDialog.onNext(Unit)
             updateSecretView.onNext(gameData.secret)
-            currentSecret = Array(4) { CodePeg(CodePegColor.EMPTY) }
+            currentSecret = get4EmptyPegs()
         } else {
             if (gameData.isLastLevel()) {
                 showLostDialog.onNext(Unit)
                 updateSecretView.onNext(gameData.secret)
-                currentSecret = Array(4) { CodePeg(CodePegColor.EMPTY) }
+                currentSecret = get4EmptyPegs()
             } else {
                 gameData.guesses[gameData.currentLevel - 1] = guessHint
                 gameData.guesses[gameData.currentLevel].isCurrentLevel = true
@@ -191,53 +196,24 @@ class GameViewModel @Inject constructor(
                 get4EmptyPegs()
             )
             Player.CODE_BREAKER -> {
-                setupUiForCodeBreaker.onNext(gameData)
+                setupUiForCodeBreaker.onNext(Unit)
                 updateCurrentLevel.onNext(gameData to gameData.guesses.size - gameData.currentLevel)
                 updateActionButtonStatus(gameData.getCurrentGuess())
             }
         }
     }
 
-    override fun onCreate() {
-        isNewGame = true
-    }
-
     private fun setupNewGame(gameMode: GameMode) {
-        gameData = setupGame(gameMode, gameSettings)
-        setupUi.onNext(gameData)
+        setupGameUseCase.execute(gameMode, getSecret(gameMode, gameSettings))
+            .compose(schedulerProvider.doOnIoObserveOnMainSingle())
+            .subscribe({ newGameData ->
+                gameData = newGameData
+                updateSecretView.onNext(get4EmptyPegs())
+                setupUi.onNext(gameData)
+            }, {
+                Timber.d("Error setting up new game. ${it.printStackTrace()}")
+            }).addTo(subscriptions)
     }
-
-    private fun setupGame(gameMode: GameMode, settings: GameSettings): GameData {
-        val numberOfGuesses = when (settings.level) {
-            GameLevel.EASY -> 15
-            GameLevel.MEDIUM -> 10
-            GameLevel.HARD -> 8
-        }
-
-        val guesses = MutableList(numberOfGuesses) {
-            getEmptyGuessHintModel(it)
-        }
-
-        guesses.first().isCurrentLevel = true
-        val secret = getSecret(gameMode, settings)
-        updateSecretView.onNext(get4EmptyPegs())
-
-        return getNewGameData(
-            secret,
-            numberOfGuesses,
-            gameMode,
-            settings,
-            guesses
-        )
-    }
-
-    private fun getEmptyGuessHintModel(position: Int) = GuessHintModel(
-        number = (position + 1).toString(),
-        guess = Array(4) { CodePeg() },
-        hint = List(4) { KeyPeg() },
-        isCurrentLevel = false,
-        isGuessCorrect = false
-    )
 
     private fun getSecret(
         gameMode: GameMode,
@@ -254,64 +230,65 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun get4EmptyPegs() = List(4) {
-        CodePeg(CodePegColor.EMPTY)
+    override fun onCreate() {
+        setIsNewGameUseCase.execute(true)
     }
-
-    private fun getNewGameData(
-        secret: List<CodePeg>,
-        numberOfGuesses: Int,
-        gameMode: GameMode,
-        settings: GameSettings,
-        guesses: MutableList<GuessHintModel>
-    ) = GameData(
-        secret = secret,
-        numberOfGuesses = numberOfGuesses,
-        gameMode = gameMode,
-        currentLevel = 1,
-        areBlanksAllowed = settings.areBlanksAllowed,
-        areDuplicatesAllowed = settings.areDuplicatesAllowed,
-        guesses = guesses,
-        currentPlayer = if (gameMode == GameMode.SINGLE_PLAYER) {
-            Player.CODE_BREAKER
-        } else Player.CODE_MAKER
-    )
 
     override fun onPause() {
         saveGameDataUseCase.execute(gameData)
-        isNewGame = false
+        setIsNewGameUseCase.execute(false)
     }
 
-    override fun setupUi(): Observable<GameData> = setupUi.observeOnUiAndHide()
-    override fun updateCurrentLevel(): Observable<Pair<GameData, Int>> =
+    override fun setupUi()
+            : Observable<GameData> = setupUi.observeOnUiAndHide()
+
+    override fun updateCurrentLevel()
+            : Observable<Pair<GameData, Int>> =
         updateCurrentLevel.observeOnUiAndHide()
 
-    override fun updateNewLevel(): Observable<Pair<GameData, Int>> =
+    override fun updateNewLevel()
+            : Observable<Pair<GameData, Int>> =
         updateNewLevel.observeOnUiAndHide()
 
-    override fun enableCheckButton(): Observable<Boolean> =
+    override fun enableCheckButton()
+            : Observable<Boolean> =
         enableActionButton.observeOnUiAndHide()
 
-    override fun showWinDialog(): Observable<Unit> = showWinDialog.observeOnUiAndHide()
-    override fun showLostDialog(): Observable<Unit> = showLostDialog.observeOnUiAndHide()
-    override fun updateSecretView(): Observable<List<CodePeg>> =
+    override fun showWinDialog()
+            : Observable<Unit> =
+        showWinDialog.observeOnUiAndHide()
+
+    override fun showLostDialog()
+            : Observable<Unit> =
+        showLostDialog.observeOnUiAndHide()
+
+    override fun updateSecretView()
+            : Observable<Array<CodePeg>> =
         updateSecretView.observeOnUiAndHide()
 
-    override fun showCodeMakerTurnDialog(): Observable<Unit> =
+    override fun showCodeMakerTurnDialog()
+            : Observable<Unit> =
         showCodeMakerTurnDialog.observeOnUiAndHide()
 
-    override fun showCodeBreakerTurnDialog(): Observable<Unit> =
+    override fun showCodeBreakerTurnDialog()
+            : Observable<Unit> =
         showCodeBreakerTurnDialog.observeOnUiAndHide()
 
-    override fun setupUiForCodeMaker(): Observable<List<CodePeg>> =
+    override fun setupUiForCodeMaker()
+            : Observable<Array<CodePeg>> =
         setupUiForCodeMaker.observeOnUiAndHide()
 
-    override fun setupUiForCodeBreaker(): Observable<GameData> =
+    override fun setupUiForCodeBreaker()
+            : Observable<Unit> =
         setupUiForCodeBreaker.observeOnUiAndHide()
 
-    override fun removeDuplicatePegFromSecret(): Observable<Int> =
+    override fun removeDuplicatePegFromSecret()
+            : Observable<Int> =
         removeDuplicatePegFromSecret.observeOnUiAndHide()
 
-    private fun GameData.getCurrentGuess() = this.guesses[this.currentLevel - 1].guess
-    private fun GameData.isLastLevel() = this.currentLevel == this.guesses.size
+    private fun GameData.getCurrentGuess() =
+        this.guesses[this.currentLevel - 1].guess
+
+    private fun GameData.isLastLevel() =
+        this.currentLevel == this.guesses.size
 }

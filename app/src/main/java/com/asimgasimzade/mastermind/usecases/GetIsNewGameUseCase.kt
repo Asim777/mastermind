@@ -5,8 +5,8 @@ import dagger.Reusable
 import javax.inject.Inject
 
 @Reusable
-class GetSavedGameDataUseCase @Inject constructor(
+class GetIsNewGameUseCase @Inject constructor(
     private val gameDataRepository: GameDataRepository
 ) {
-    fun execute() = gameDataRepository.getGameData()
+    fun execute() = gameDataRepository.getIsNewGame()
 }

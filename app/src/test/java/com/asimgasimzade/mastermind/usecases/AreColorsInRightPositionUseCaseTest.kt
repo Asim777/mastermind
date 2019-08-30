@@ -13,8 +13,8 @@ import org.mockito.junit.MockitoJUnit
 @RunWith(Parameterized::class)
 class AreColorsInRightPositionUseCaseTest(
     private val guessHint: GuessHintModel,
-    private val secret: List<CodePeg>,
-    private val expected: List<Boolean>
+    private val secret: Array<CodePeg>,
+    private val expected: Array<Boolean>
 
 ) {
     @get:Rule

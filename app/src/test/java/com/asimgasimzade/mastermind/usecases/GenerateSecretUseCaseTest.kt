@@ -42,5 +42,5 @@ class GenerateSecretUseCaseTest {
     }
 }
 
-private fun <CodePeg> List<CodePeg>.containsDuplicate() =
+private fun <CodePeg> Array<CodePeg>.containsDuplicate() =
     this.groupingBy { it }.eachCount().values.any { it > 1 }

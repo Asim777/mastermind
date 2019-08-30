@@ -11,6 +11,6 @@ class SaveGameDataUseCase @Inject constructor(
     private val gameDataRepository: GameDataRepository
 ) {
     fun execute(gameData: GameData) = Single.just(
-        gameDataRepository.save(gameData)
+        gameDataRepository.saveGameData(gameData)
     )
 }

@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 @Reusable
 class AreColorsInRightPositionsUseCase @Inject constructor() {
-    fun execute(guessHint: GuessHintModel, secret: List<CodePeg>) =
-        List(4) {
+    fun execute(guessHint: GuessHintModel, secret: Array<CodePeg>) =
+        Array(4) {
             secret[it].color == guessHint.guess[it].color
         }
 }

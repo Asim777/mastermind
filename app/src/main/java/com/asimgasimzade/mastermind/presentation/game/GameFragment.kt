@@ -95,7 +95,7 @@ class GameFragment : BaseFragment<GameViewModel, FragmentGameBinding>() {
             .addTo(subscriptions)
 
         viewModel.setupUiForCodeBreaker()
-            .subscribe(::setupUiForCodeBreaker)
+            .subscribe { setupUiForCodeBreaker() }
             .addTo(subscriptions)
 
         viewModel.setupUiForCodeMaker()
@@ -151,13 +151,13 @@ class GameFragment : BaseFragment<GameViewModel, FragmentGameBinding>() {
         binding.guessHintRecyclerView.scrollToPosition(gameData.guesses.size - 1)
     }
 
-    private fun setupUiForCodeBreaker(gameData: GameData) {
+    private fun setupUiForCodeBreaker() {
         setSecretViewOnDragListeners(false)
         updateActionButton(R.string.action_button_text_check)
         guessHintAdapter.disableCodePlaces = false
     }
 
-    private fun setupUiForCodeMaker(emptySecret: List<CodePeg>) {
+    private fun setupUiForCodeMaker(emptySecret: Array<CodePeg>) {
         setSecretViewOnDragListeners(true)
         updateSecretView(emptySecret, true)
         updateActionButton(R.string.action_button_text_hide_secret)
@@ -232,7 +232,7 @@ class GameFragment : BaseFragment<GameViewModel, FragmentGameBinding>() {
         viewModel.onSecretPegAdded(addedSecretCodePeg, viewPosition)
     }
 
-    private fun updateSecretView(secret: List<CodePeg>, isCodeMaker: Boolean) {
+    private fun updateSecretView(secret: Array<CodePeg>, isCodeMaker: Boolean) {
         secret.forEachIndexed { position, codePeg ->
             secretViews[position].setImageResource(
                 if (codePeg == CodePeg(CodePegColor.EMPTY)) {
