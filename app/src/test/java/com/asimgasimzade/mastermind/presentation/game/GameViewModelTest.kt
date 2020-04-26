@@ -48,6 +48,7 @@ class GameViewModelTest {
             areBlanksAllowed = false,
             guesses = MutableList(10) {
                 GuessHintModel(
+                    number = (10-it).toString(),
                     guess = listOf(),
                     hint = listOf()
                 )

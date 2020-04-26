@@ -1,7 +1,7 @@
 package com.asimgasimzade.mastermind.presentation.game
 
-import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
+import com.asimgasimzade.mastermind.BR
 import com.asimgasimzade.mastermind.R
 import com.asimgasimzade.mastermind.data.model.GameMode
 import com.asimgasimzade.mastermind.data.model.GameModel
@@ -33,8 +33,8 @@ class GameFragment : BaseFragment<GameViewModel, FragmentGameBinding>() {
     }
 
     private fun setupUi(game: GameModel) {
-        //TODO: Implement setup ui
-        binding.guessHintRecyclerView
+        binding.guessHintRecyclerView.adapter = GuessHintAdapter()
+        binding.setVariable(BR.gameModel, game)
     }
 
     override val bindingLayout: Int = R.layout.fragment_game

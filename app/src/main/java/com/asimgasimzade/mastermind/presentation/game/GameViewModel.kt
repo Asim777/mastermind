@@ -63,6 +63,7 @@ class GameViewModel @Inject constructor(
 
         val guesses = MutableList(numberOfGuesses) {
             GuessHintModel(
+                number = (numberOfGuesses - it).toString(),
                 guess = emptyList(),
                 hint = emptyList()
             )

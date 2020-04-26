@@ -14,7 +14,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 
-class GuessHintAdapter() :
+class GuessHintAdapter :
     RecyclerView.Adapter<GuessHintAdapter.GuessHintHolder>(),
     BindableAdapter<List<GuessHintModel>> {
 
@@ -43,7 +43,7 @@ class GuessHintAdapter() :
             )
         )
 
-    override fun getItemCount() = guessHintsList.size + 1
+    override fun getItemCount() = guessHintsList.size
 
     override fun onBindViewHolder(holder: GuessHintHolder, position: Int) {
         RxView.clicks(holder.itemView)
