@@ -44,19 +44,19 @@ class MenuViewModel @Inject constructor(
     }
 
     override fun onMultiPlayerClicked() {
-        TODO("Not yet implemented")
+        navigate.onNext(Destination.NewGame)
     }
 
     override fun onSettingsClicked() {
-        TODO("Not yet implemented")
+        navigate.onNext(Destination.Settings)
     }
 
     override fun onHowToPlayClicked() {
-        TODO("Not yet implemented")
+        navigate.onNext(Destination.HowToPlay)
     }
 
     override fun onExitClicked() {
-        TODO("Not yet implemented")
+        navigate.onNext(Destination.Exit)
     }
 
     override fun navigate(): Observable<Destination> = navigate.observeOnUiAndHide()

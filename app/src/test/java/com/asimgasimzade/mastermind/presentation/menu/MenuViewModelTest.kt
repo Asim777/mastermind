@@ -30,6 +30,36 @@ class MenuViewModelTest {
     }
 
     @Test
+    fun `When onNewGameClicked then navigate to Game`() {
+        // Given
+        val expectedDestination = Destination.NewGame
+        val navigateObserver = cut.navigate().test()
+
+        // When
+        cut.onNewGameClicked()
+
+        // Then
+        navigateObserver
+            .assertValue(expectedDestination)
+            .assertNoErrors()
+    }
+
+    @Test
+    fun `When onMultiPlayerClicked then navigate to Game`() {
+        // Given
+        val expectedDestination = Destination.NewGame
+        val navigateObserver = cut.navigate().test()
+
+        // When
+        cut.onMultiPlayerClicked()
+
+        // Then
+        navigateObserver
+            .assertValue(expectedDestination)
+            .assertNoErrors()
+    }
+
+    @Test
     fun `When onSettingsClicked then navigate to Settings`() {
         // Given
         val expectedDestination = Destination.Settings
