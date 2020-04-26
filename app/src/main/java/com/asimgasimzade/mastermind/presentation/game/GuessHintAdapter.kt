@@ -15,7 +15,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 
 class GuessHintAdapter() :
-    RecyclerView.Adapter<GuessHintAdapter.ProductHolder>(),
+    RecyclerView.Adapter<GuessHintAdapter.GuessHintHolder>(),
     BindableAdapter<List<GuessHintModel>> {
 
     private val subscriptions = CompositeDisposable()
@@ -34,7 +34,7 @@ class GuessHintAdapter() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ProductHolder(
+        GuessHintHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
                 R.layout.guess_hint_item,
@@ -45,7 +45,7 @@ class GuessHintAdapter() :
 
     override fun getItemCount() = guessHintsList.size + 1
 
-    override fun onBindViewHolder(holder: ProductHolder, position: Int) {
+    override fun onBindViewHolder(holder: GuessHintHolder, position: Int) {
         RxView.clicks(holder.itemView)
             .subscribe {
                 itemClick.onNext(position)
@@ -54,12 +54,12 @@ class GuessHintAdapter() :
         holder.bind(guessHintsList[position])
     }
 
-    inner class ProductHolder(
+    inner class GuessHintHolder(
         private val viewDataBinding: ViewDataBinding
     ) : RecyclerView.ViewHolder(viewDataBinding.root) {
 
-        fun bind(productItem: GuessHintModel) {
-            viewDataBinding.setVariable(BR.guessHintModel, productItem)
+        fun bind(guessHintModel: GuessHintModel) {
+            viewDataBinding.setVariable(BR.guessHintModel, guessHintModel)
         }
     }
 }

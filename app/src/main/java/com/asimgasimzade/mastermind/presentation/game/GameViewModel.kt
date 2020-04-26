@@ -69,7 +69,8 @@ class GameViewModel @Inject constructor(
         }
 
         val secret = when (gameMode) {
-            GameMode.SINGLE_PLAYER -> generateSecretUseCase.execute().blockingGet()
+            GameMode.SINGLE_PLAYER ->
+                generateSecretUseCase.execute(settings.areDuplicatesAllowed).blockingGet()
             GameMode.MULTIPLAYER -> TODO("Implement multi-player mode")
         }
 
