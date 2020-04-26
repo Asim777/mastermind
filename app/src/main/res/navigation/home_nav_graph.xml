@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainGraph"
+    app:startDestination="@id/menuFragment">
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.asimgasimzade.mastermind.presentation.menu.MenuFragment"
+        tools:layout="@layout/fragment_menu">
+
+        <action
+            android:id="@+id/goToGameFragmentFromMenu"
+            app:destination="@id/gameFragment" />
+
+        <action
+            android:id="@+id/goToHowToPlayFragmentFromMenu"
+            app:destination="@id/howToPlayFragment" />
+
+        <action
+            android:id="@+id/goToSettingsFragmentFromMenu"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.asimgasimzade.mastermind.presentation.game.GameFragment"
+        tools:layout="@layout/fragment_game" />
+
+    <fragment
+        android:id="@+id/howToPlayFragment"
+        android:name="com.asimgasimzade.mastermind.presentation.howtoplay.HowToPlayFragment"
+        tools:layout="@layout/fragment_how_to_play" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.asimgasimzade.mastermind.presentation.settings.SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
+</navigation>
