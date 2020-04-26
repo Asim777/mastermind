@@ -7,6 +7,7 @@ import com.asimgasimzade.mastermind.R
 import com.asimgasimzade.mastermind.data.model.GameMode
 import com.asimgasimzade.mastermind.databinding.FragmentMenuBinding
 import com.asimgasimzade.mastermind.presentation.base.BaseFragment
+import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.rxkotlin.addTo
 
 const val GAME_MODE_KEY = "gameMode"
@@ -23,10 +24,6 @@ class MenuFragment : BaseFragment<MenuViewModel, FragmentMenuBinding>() {
     }
 
     private fun setupOutputListeners() {
-        //TODO: Implement output listeners
-    }
-
-    private fun setupInputListeners() {
         viewModel.outputs.navigate().subscribe { destination ->
             when (destination) {
                 is MenuViewModel.Companion.Destination.NewGame -> {
@@ -43,8 +40,31 @@ class MenuFragment : BaseFragment<MenuViewModel, FragmentMenuBinding>() {
                     navigateTo(R.id.goToHowToPlayFragmentFromMenu)
                 is MenuViewModel.Companion.Destination.Exit ->
                     //TODO: Save game progress before finishing
+                    //TODO: Add confirmation dialog before finishing
                     requireActivity().finish()
             }
+        }.addTo(subscriptions)
+    }
+
+    private fun setupInputListeners() {
+        RxView.clicks(binding.menuItemNewGame).subscribe {
+            viewModel.inputs.onNewGameClicked()
+        }.addTo(subscriptions)
+
+        RxView.clicks(binding.menuItemMultiplayer).subscribe {
+            viewModel.inputs.onMultiPlayerClicked()
+        }.addTo(subscriptions)
+
+        RxView.clicks(binding.menuItemSettings).subscribe {
+            viewModel.inputs.onSettingsClicked()
+        }.addTo(subscriptions)
+
+        RxView.clicks(binding.menuItemHowToPlay).subscribe {
+            viewModel.inputs.onHowToPlayClicked()
+        }.addTo(subscriptions)
+
+        RxView.clicks(binding.menuItemExit).subscribe {
+            viewModel.inputs.onExitClicked()
         }.addTo(subscriptions)
     }
 
