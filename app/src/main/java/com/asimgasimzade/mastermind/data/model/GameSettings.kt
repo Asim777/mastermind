@@ -18,9 +18,5 @@ enum class GameLevel {
 @Parcelize
 enum class GameMode: Parcelable {
     SINGLE_PLAYER,
-    MULTIPLAYER;
-
-    companion object {
-        fun from(name: String) = values().firstOrNull { it.name == name }
-    }
+    MULTIPLAYER
 }

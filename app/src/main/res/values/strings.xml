@@ -8,4 +8,5 @@
     <string name="menu_item_how_to_play">How To Play</string>
     <string name="menu_item_exit">Exit</string>
     <string name="menu_mastermind_logo_content_description">Mastermind logo</string>
+    <string name="secret_view_peg_content_description">Secret view peg place</string>
 </resources>
