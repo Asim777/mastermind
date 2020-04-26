@@ -6,7 +6,7 @@
 
         <variable
             name="howToPlayViewModel"
-            type="com.asimgasimzade.mastermind.data.HowToPlayModel" />
+            type="com.asimgasimzade.mastermind.data.model.HowToPlayModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"

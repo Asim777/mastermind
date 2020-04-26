@@ -35,9 +35,9 @@ open class BaseViewModel(
     open val outputs: BaseViewModelOutputs
         get() = this
 
-    private val finish: Subject<Unit> = PublishSubject.create()
-    private val error: Subject<Int> = PublishSubject.create()
-    private val refreshing: Subject<Boolean> = BehaviorSubject.createDefault(false)
+    protected val finish: Subject<Unit> = PublishSubject.create()
+    protected val error: Subject<Int> = PublishSubject.create()
+    protected val refreshing: Subject<Boolean> = BehaviorSubject.createDefault(false)
 
 
     override fun onCleared() {

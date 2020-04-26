@@ -1,4 +1,4 @@
-package com.asimgasimzade.mastermind.data
+package com.asimgasimzade.mastermind.data.model
 
 data class GuessHintModel(
     val guess: List<CodePeg>,

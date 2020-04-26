@@ -12,7 +12,12 @@
 
         <action
             android:id="@+id/goToGameFragmentFromMenu"
-            app:destination="@id/gameFragment" />
+            app:destination="@id/gameFragment">
+
+            <argument
+                android:name="gameMode"
+                app:argType="com.asimgasimzade.mastermind.data.model.GameMode" />
+        </action>
 
         <action
             android:id="@+id/goToHowToPlayFragmentFromMenu"

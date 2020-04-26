@@ -7,7 +7,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.asimgasimzade.mastermind.BR
 import com.asimgasimzade.mastermind.R
-import com.asimgasimzade.mastermind.data.GuessHintModel
+import com.asimgasimzade.mastermind.data.model.GuessHintModel
 import com.asimgasimzade.mastermind.presentation.base.BindableAdapter
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.disposables.CompositeDisposable
