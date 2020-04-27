@@ -1,6 +1,6 @@
 package com.asimgasimzade.mastermind.usecases
 
-import com.asimgasimzade.mastermind.data.GameSettingsRepository
+import com.asimgasimzade.mastermind.data.gamesettings.GameSettingsRepository
 import dagger.Reusable
 import javax.inject.Inject
 

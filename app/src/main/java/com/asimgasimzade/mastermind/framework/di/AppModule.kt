@@ -4,10 +4,14 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
-import com.asimgasimzade.mastermind.data.GameSettingsDataSource
-import com.asimgasimzade.mastermind.data.GameSettingsRepository
-import com.asimgasimzade.mastermind.data.GameSettingsRepositoryType
-import com.asimgasimzade.mastermind.data.LocalGameSettingsDataSource
+import com.asimgasimzade.mastermind.data.gamedata.GameDataDataSource
+import com.asimgasimzade.mastermind.data.gamedata.GameDataRepository
+import com.asimgasimzade.mastermind.data.gamedata.GameDataRepositoryType
+import com.asimgasimzade.mastermind.data.gamedata.LocalGameDataDataSource
+import com.asimgasimzade.mastermind.data.gamesettings.GameSettingsDataSource
+import com.asimgasimzade.mastermind.data.gamesettings.GameSettingsRepository
+import com.asimgasimzade.mastermind.data.gamesettings.GameSettingsRepositoryType
+import com.asimgasimzade.mastermind.data.gamesettings.LocalGameSettingsDataSource
 import com.asimgasimzade.mastermind.framework.AppSchedulerProvider
 import com.asimgasimzade.mastermind.framework.SchedulerProvider
 import com.google.gson.Gson
@@ -44,12 +48,35 @@ class AppModule {
     @Singleton
     fun provideGameSettingsRepository(
         dataSource: LocalGameSettingsDataSource
-    ): GameSettingsRepositoryType = GameSettingsRepository(dataSource)
+    ) = GameSettingsRepository(dataSource)
 
     @Provides
     @Reusable
     fun provideLocalGameSettingsDataSource(
         sharedPreferences: SharedPreferences,
         gson: Gson
-    ): GameSettingsDataSource = LocalGameSettingsDataSource(sharedPreferences, gson)
+    ): GameSettingsDataSource =
+        LocalGameSettingsDataSource(
+            sharedPreferences,
+            gson
+        )
+
+    @Provides
+    @Singleton
+    fun provideGameDataRepository(
+        dataSource: LocalGameDataDataSource
+    ) = GameDataRepository(
+        dataSource
+    )
+
+    @Provides
+    @Reusable
+    fun provideLocalGameDataDataSource(
+        sharedPreferences: SharedPreferences,
+        gson: Gson
+    ): GameDataDataSource =
+        LocalGameDataDataSource(
+            sharedPreferences,
+            gson
+        )
 }

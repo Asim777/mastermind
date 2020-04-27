@@ -1,8 +1,7 @@
-package com.asimgasimzade.mastermind.data
+package com.asimgasimzade.mastermind.data.gamesettings
 
 import android.content.SharedPreferences
 import com.asimgasimzade.mastermind.data.model.GameLevel
-import com.asimgasimzade.mastermind.data.model.GameMode
 import com.asimgasimzade.mastermind.data.model.GameSettings
 import com.google.gson.Gson
 import io.reactivex.Single

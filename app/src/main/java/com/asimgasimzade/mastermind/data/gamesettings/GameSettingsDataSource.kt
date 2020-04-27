@@ -1,4 +1,4 @@
-package com.asimgasimzade.mastermind.data
+package com.asimgasimzade.mastermind.data.gamesettings
 
 import com.asimgasimzade.mastermind.data.model.GameSettings
 import dagger.Reusable

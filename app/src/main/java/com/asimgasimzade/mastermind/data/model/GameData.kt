@@ -1,6 +1,6 @@
 package com.asimgasimzade.mastermind.data.model
 
-data class GameModel(
+data class GameData(
     val secret: List<CodePeg>,
     var numberOfGuesses: Int,
     var areDuplicatesAllowed: Boolean,

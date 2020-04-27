@@ -1,11 +1,9 @@
 package com.asimgasimzade.mastermind.usecases
 
-import com.asimgasimzade.mastermind.data.GameSettingsRepository
-import com.asimgasimzade.mastermind.data.LocalGameSettingsDataSource
+import com.asimgasimzade.mastermind.data.gamesettings.GameSettingsRepository
 import com.asimgasimzade.mastermind.data.model.GameLevel
 import com.asimgasimzade.mastermind.data.model.GameSettings
 import com.nhaarman.mockito_kotlin.given
-import com.nhaarman.mockito_kotlin.verify
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test

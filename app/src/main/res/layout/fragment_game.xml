@@ -7,7 +7,7 @@
 
         <variable
             name="gameModel"
-            type="com.asimgasimzade.mastermind.data.model.GameModel" />
+            type="com.asimgasimzade.mastermind.data.model.GameData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,7 @@
 
         <include
             android:id="@+id/peg_palette"
-            layout="@layout/peg_palette" />
+            layout="@layout/peg_palette"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,8 +3,10 @@ package com.asimgasimzade.mastermind.presentation.game
 import android.app.Application
 import com.asimgasimzade.mastermind.data.model.*
 import com.asimgasimzade.mastermind.framework.TestSchedulerProvider
+import com.asimgasimzade.mastermind.usecases.EvaluateGuessUseCase
 import com.asimgasimzade.mastermind.usecases.GenerateSecretUseCase
 import com.asimgasimzade.mastermind.usecases.GetGameSettingsUseCase
+import com.asimgasimzade.mastermind.usecases.SaveGameDataUseCase
 import com.nhaarman.mockito_kotlin.given
 import io.reactivex.Single
 import org.junit.Before
@@ -26,22 +28,30 @@ class GameViewModelTest {
     @Mock
     lateinit var generateSecretUseCase: GenerateSecretUseCase
 
+    @Mock
+    lateinit var saveGameDataUseCase: SaveGameDataUseCase
+
+    @Mock
+    lateinit var evaluateGuessUseCase: EvaluateGuessUseCase
+
     @Before
     fun setUp() {
         cut = GameViewModel(
             application,
             TestSchedulerProvider(),
             getGameSettingsUseCase,
-            generateSecretUseCase
+            generateSecretUseCase,
+            saveGameDataUseCase,
+            evaluateGuessUseCase
         )
     }
 
     @Test
-    fun ` Given gameMode and gameSettings When setupGame then setupUi with correct gameModel`() {
+    fun ` Given gameMode and gameSettings when setupGame then setupUi with correct gameModel`() {
         // Given
-        val expectedGameModel = GameModel(
+        val expectedGameModel = GameData(
             secret = MutableList(4) {
-                CodePeg(it + 1)
+                CodePeg(CodePegColor.values()[it])
             },
             numberOfGuesses = 10,
             areDuplicatesAllowed = false,
