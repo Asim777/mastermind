@@ -2,6 +2,7 @@ package com.asimgasimzade.mastermind.presentation.game
 
 import android.content.ClipData
 import android.os.Build
+import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -31,6 +32,12 @@ class GameFragment : BaseFragment<GameViewModel, FragmentGameBinding>() {
 
     @Inject
     lateinit var dialogCreator: DialogCreator
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.inputs.onCreate()
+    }
 
     override fun onResume() {
         super.onResume()
@@ -161,9 +168,15 @@ class GameFragment : BaseFragment<GameViewModel, FragmentGameBinding>() {
                 viewModel.inputs.playAgain()
             },
             onLeave = {
-                requireActivity().finish()
+                findNavController().popBackStack()
             }
         )
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        viewModel.onPause()
     }
 
     private fun showLostDialog() {

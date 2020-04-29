@@ -6,6 +6,6 @@ import io.reactivex.Single
 
 @Reusable
 interface GameSettingsDataSource {
-    fun get(): Single<GameSettings>
-    fun save(gameSettings: GameSettings)
+    fun getGameSettings(): Single<GameSettings>
+    fun saveGameSettings(gameSettings: GameSettings)
 }

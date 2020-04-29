@@ -8,5 +8,6 @@ import javax.inject.Inject
 class GetGameSettingsUseCase @Inject constructor(
     private val gameSettingsRepository: GameSettingsRepository
 ) {
-    fun execute() = gameSettingsRepository.get()
+    fun execute() =
+        gameSettingsRepository.getGameSettings()
 }

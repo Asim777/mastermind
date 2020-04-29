@@ -14,6 +14,7 @@ interface BaseViewModelInputs {
     fun onCreate()
     fun onStart()
     fun onStop()
+    fun onPause()
 }
 
 interface BaseViewModelOutputs {
@@ -52,6 +53,8 @@ open class BaseViewModel(
     override fun onStart() {}
 
     override fun onStop() {}
+
+    override fun onPause() {}
 
     override fun error(): Observable<Int> = error.observeOnUiAndHide()
 

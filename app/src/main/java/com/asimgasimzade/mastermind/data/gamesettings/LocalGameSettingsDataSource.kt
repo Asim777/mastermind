@@ -14,7 +14,7 @@ class LocalGameSettingsDataSource @Inject constructor(
     private val gson: Gson
 ) : GameSettingsDataSource {
 
-    override fun get() = Single.just(
+    override fun getGameSettings() = Single.just(
         gson.fromJson(
             sharedPreferences.getString(
                 GAME_SETTINGS_SHARED_PREFERENCES_KEY,
@@ -23,7 +23,7 @@ class LocalGameSettingsDataSource @Inject constructor(
         )
     )
 
-    override fun save(gameSettings: GameSettings) {
+    override fun saveGameSettings(gameSettings: GameSettings) {
         sharedPreferences.edit()
             .putString(GAME_SETTINGS_SHARED_PREFERENCES_KEY, gson.toJson(gameSettings)).apply()
     }

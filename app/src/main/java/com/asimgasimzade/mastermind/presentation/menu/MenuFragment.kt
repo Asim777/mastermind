@@ -39,8 +39,6 @@ class MenuFragment : BaseFragment<MenuViewModel, FragmentMenuBinding>() {
                 is MenuViewModel.Companion.Destination.HowToPlay ->
                     navigateTo(R.id.goToHowToPlayFragmentFromMenu)
                 is MenuViewModel.Companion.Destination.Exit ->
-                    //TODO: Save game progress before finishing
-                    //TODO: Add confirmation dialog before finishing
                     requireActivity().finish()
             }
         }.addTo(subscriptions)

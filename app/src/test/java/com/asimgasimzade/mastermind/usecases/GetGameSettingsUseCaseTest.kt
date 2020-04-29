@@ -32,7 +32,7 @@ class GetGameSettingsUseCaseTest {
             areBlanksAllowed = false
         )
 
-        given { gameSettingsRepository.get() }.willReturn(Single.just(expectedGameSettings))
+        given { gameSettingsRepository.getGameSettings() }.willReturn(Single.just(expectedGameSettings))
 
         // When
         val actual = cut.execute()

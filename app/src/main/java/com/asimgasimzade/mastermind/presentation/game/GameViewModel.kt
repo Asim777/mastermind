@@ -6,10 +6,7 @@ import com.asimgasimzade.mastermind.framework.SchedulerProvider
 import com.asimgasimzade.mastermind.presentation.base.BaseViewModel
 import com.asimgasimzade.mastermind.presentation.base.BaseViewModelInputs
 import com.asimgasimzade.mastermind.presentation.base.BaseViewModelOutputs
-import com.asimgasimzade.mastermind.usecases.EvaluateGuessUseCase
-import com.asimgasimzade.mastermind.usecases.GenerateSecretUseCase
-import com.asimgasimzade.mastermind.usecases.GetGameSettingsUseCase
-import com.asimgasimzade.mastermind.usecases.SaveGameDataUseCase
+import com.asimgasimzade.mastermind.usecases.*
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
@@ -38,6 +35,7 @@ class GameViewModel @Inject constructor(
     schedulerProvider: SchedulerProvider,
     private val getGameSettingsUseCase: GetGameSettingsUseCase,
     private val generateSecretUseCase: GenerateSecretUseCase,
+    private val getSavedGameDataUseCase: GetSavedGameDataUseCase,
     private val saveGameDataUseCase: SaveGameDataUseCase,
     private val evaluateGuessUseCase: EvaluateGuessUseCase
 ) : BaseViewModel(application, schedulerProvider),
@@ -59,18 +57,33 @@ class GameViewModel @Inject constructor(
 
     private lateinit var gameData: GameData
     private lateinit var gameSettings: GameSettings
+    private var isNewGame = false
 
     override fun onLoad(gameMode: GameMode) {
         getGameSettingsUseCase.execute()
             .doOnSubscribe { refreshing.onNext(true) }
-            .doFinally { refreshing.onNext(false) }
             .compose(schedulerProvider.doOnIoObserveOnMainSingle())
             .subscribe({ settings ->
                 gameSettings = settings
-                val game = setupGame(gameMode, gameSettings)
-                setupUi.onNext(game)
+                if (!isNewGame) {
+                    continueSavedGame(gameMode)
+                } else {
+                    setupNewGame(gameMode)
+                }
             }, {
                 Timber.d("Error while retrieving game settings. ${it.printStackTrace()}")
+            }).addTo(subscriptions)
+    }
+
+    private fun continueSavedGame(gameMode: GameMode) {
+        getSavedGameDataUseCase.execute()
+            .doFinally { refreshing.onNext(false) }
+            .compose(schedulerProvider.doOnIoObserveOnMainSingle())
+            .subscribe({ savedGameData ->
+                gameData = savedGameData ?: setupGame(gameMode, gameSettings)
+                setupUi.onNext(gameData)
+            }, {
+                Timber.d("Error while retrieving game data. ${it.printStackTrace()}")
             }).addTo(subscriptions)
     }
 
@@ -118,7 +131,15 @@ class GameViewModel @Inject constructor(
     }
 
     override fun playAgain() {
-        setupGame(gameData.gameMode, gameSettings)
+        setupNewGame(gameData.gameMode)
+    }
+
+    override fun onCreate() {
+        isNewGame = true
+    }
+
+    private fun setupNewGame(gameMode: GameMode) {
+        gameData = setupGame(gameMode, gameSettings)
         setupUi.onNext(gameData)
     }
 
@@ -146,16 +167,13 @@ class GameViewModel @Inject constructor(
         }
         updateSecretView.onNext(List(4) { CodePeg(CodePegColor.EMPTY) })
 
-        gameData = getNewGameData(
+        return getNewGameData(
             secret,
             numberOfGuesses,
             gameMode,
             settings,
             guesses
         )
-        saveGameDataUseCase.execute(gameData)
-
-        return gameData
     }
 
     private fun getNewGameData(
@@ -173,6 +191,11 @@ class GameViewModel @Inject constructor(
         areDuplicatesAllowed = settings.areDuplicatesAllowed,
         guesses = guesses
     )
+
+    override fun onPause() {
+        saveGameDataUseCase.execute(gameData)
+        isNewGame = false
+    }
 
     override fun setupUi(): Observable<GameData> = setupUi.observeOnUiAndHide()
     override fun updateGuessHint(): Observable<GameData> = updateGuessHint.observeOnUiAndHide()
