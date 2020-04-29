@@ -41,7 +41,7 @@ class EvaluateGuessUseCase @Inject constructor(
 
         return guessHintModel.copy(
             hint = hintList,
-            isGuessCorrect = hintList == guessHintModel.guess
+            isGuessCorrect = hintList.filter { it == KeyPeg(KeyPegValue.RED) }.size == 4
         )
     }
 }

@@ -1,8 +1,5 @@
 package com.asimgasimzade.mastermind.data.model
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
 data class GameSettings(
     val level: GameLevel,
     val areDuplicatesAllowed: Boolean,
@@ -13,10 +10,4 @@ enum class GameLevel {
     EASY,
     MEDIUM,
     HARD
-}
-
-@Parcelize
-enum class GameMode: Parcelable {
-    SINGLE_PLAYER,
-    MULTIPLAYER
 }

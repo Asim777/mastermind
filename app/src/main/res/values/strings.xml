@@ -13,4 +13,13 @@
     <!-- GAME -->
     <string name="secret_view_peg_content_description">Secret view peg place</string>
     <string name="check_button_text">Check</string>
+
+    <!-- DIALOG -->
+    <string name="dialog_image_content_description">Dialog image</string>
+    <string name="dialog_button_leave">Leave</string>
+    <string name="dialog_button_play_again">Play Again</string>
+    <string name="lost_dialog_title">You Lost</string>
+    <string name="lost_dialog_text">Try again. You will do better next time!</string>
+    <string name="win_dialog_title">You Won!</string>
+    <string name="win_dialog_text">You are a true Mastermind!</string>
 </resources>

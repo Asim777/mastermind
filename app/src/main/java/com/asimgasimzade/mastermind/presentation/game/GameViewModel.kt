@@ -10,10 +10,8 @@ import com.asimgasimzade.mastermind.usecases.EvaluateGuessUseCase
 import com.asimgasimzade.mastermind.usecases.GenerateSecretUseCase
 import com.asimgasimzade.mastermind.usecases.GetGameSettingsUseCase
 import com.asimgasimzade.mastermind.usecases.SaveGameDataUseCase
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import javax.inject.Inject
@@ -23,14 +21,15 @@ interface GameViewModelInputs : BaseViewModelInputs {
     fun onPegAdded(addedPeg: CodePeg, position: Int)
     fun onPegRemoved(removedPeg: CodePeg, position: Int)
     fun onCheckButtonClicked()
+    fun playAgain()
 }
 
 interface GameViewModelOutputs : BaseViewModelOutputs {
     fun setupUi(): Observable<GameData>
     fun updateGuessHint(): Observable<GameData>
     fun enableCheckButton(): Observable<Boolean>
-    fun showWinDialog(): Completable
-    fun showLostDialog(): Completable
+    fun showWinDialog(): Observable<Unit>
+    fun showLostDialog(): Observable<Unit>
     fun showSecret(): Observable<List<CodePeg>>
 }
 
@@ -54,11 +53,12 @@ class GameViewModel @Inject constructor(
     private val setupUi = PublishSubject.create<GameData>()
     private val updateGuessHint = PublishSubject.create<GameData>()
     private val enableCheckButton = PublishSubject.create<Boolean>()
-    private val showWinDialog = CompletableSubject.create()
-    private val showLostDialog = CompletableSubject.create()
-    private val showSecret = PublishSubject.create<List<CodePeg>>()
+    private val showWinDialog = PublishSubject.create<Unit>()
+    private val showLostDialog = PublishSubject.create<Unit>()
+    private val updateSecretView = PublishSubject.create<List<CodePeg>>()
 
     private lateinit var gameData: GameData
+    private lateinit var gameSettings: GameSettings
 
     override fun onLoad(gameMode: GameMode) {
         getGameSettingsUseCase.execute()
@@ -66,12 +66,12 @@ class GameViewModel @Inject constructor(
             .doFinally { refreshing.onNext(false) }
             .compose(schedulerProvider.doOnIoObserveOnMainSingle())
             .subscribe({ settings ->
-                val game = setupGame(gameMode, settings)
+                gameSettings = settings
+                val game = setupGame(gameMode, gameSettings)
                 setupUi.onNext(game)
             }, {
                 Timber.d("Error while retrieving game settings. ${it.printStackTrace()}")
             }).addTo(subscriptions)
-
     }
 
     override fun onPegAdded(addedPeg: CodePeg, position: Int) {
@@ -101,12 +101,12 @@ class GameViewModel @Inject constructor(
         )
 
         if (guessHint.isGuessCorrect) {
-            showWinDialog.onComplete()
-            showSecret.onNext(gameData.secret)
+            showWinDialog.onNext(Unit)
+            updateSecretView.onNext(gameData.secret)
         } else {
             if (gameData.isLastLevel()) {
-                showLostDialog.onComplete()
-                showSecret.onNext(gameData.secret)
+                showLostDialog.onNext(Unit)
+                updateSecretView.onNext(gameData.secret)
             } else {
                 gameData.guesses[gameData.currentLevel - 1] = guessHint
                 gameData.guesses[gameData.currentLevel].isCurrentLevel = true
@@ -117,13 +117,17 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    override fun playAgain() {
+        setupGame(gameData.gameMode, gameSettings)
+        setupUi.onNext(gameData)
+    }
+
     private fun setupGame(gameMode: GameMode, settings: GameSettings): GameData {
         val numberOfGuesses = when (settings.level) {
             GameLevel.EASY -> 15
             GameLevel.MEDIUM -> 10
             GameLevel.HARD -> 8
         }
-
         val guesses = MutableList(numberOfGuesses) {
             GuessHintModel(
                 number = (it + 1).toString(),
@@ -140,26 +144,42 @@ class GameViewModel @Inject constructor(
                 generateSecretUseCase.execute(settings.areDuplicatesAllowed).blockingGet()
             GameMode.MULTIPLAYER -> TODO("Implement multi-player mode")
         }
+        updateSecretView.onNext(List(4) { CodePeg(CodePegColor.EMPTY) })
 
-        gameData = GameData(
-            secret = secret,
-            numberOfGuesses = numberOfGuesses,
-            currentLevel = 1,
-            areBlanksAllowed = settings.areBlanksAllowed,
-            areDuplicatesAllowed = settings.areDuplicatesAllowed,
-            guesses = guesses
+        gameData = getNewGameData(
+            secret,
+            numberOfGuesses,
+            gameMode,
+            settings,
+            guesses
         )
         saveGameDataUseCase.execute(gameData)
 
         return gameData
     }
 
+    private fun getNewGameData(
+        secret: List<CodePeg>,
+        numberOfGuesses: Int,
+        gameMode: GameMode,
+        settings: GameSettings,
+        guesses: MutableList<GuessHintModel>
+    ) = GameData(
+        secret = secret,
+        numberOfGuesses = numberOfGuesses,
+        gameMode = gameMode,
+        currentLevel = 1,
+        areBlanksAllowed = settings.areBlanksAllowed,
+        areDuplicatesAllowed = settings.areDuplicatesAllowed,
+        guesses = guesses
+    )
+
     override fun setupUi(): Observable<GameData> = setupUi.observeOnUiAndHide()
     override fun updateGuessHint(): Observable<GameData> = updateGuessHint.observeOnUiAndHide()
     override fun enableCheckButton(): Observable<Boolean> = enableCheckButton.observeOnUiAndHide()
-    override fun showWinDialog(): Completable = showWinDialog.observeOnUiAndHide()
-    override fun showLostDialog(): Completable = showLostDialog.observeOnUiAndHide()
-    override fun showSecret(): Observable<List<CodePeg>> = showSecret.observeOnUiAndHide()
+    override fun showWinDialog(): Observable<Unit> = showWinDialog.observeOnUiAndHide()
+    override fun showLostDialog(): Observable<Unit> = showLostDialog.observeOnUiAndHide()
+    override fun showSecret(): Observable<List<CodePeg>> = updateSecretView.observeOnUiAndHide()
 
     private fun GameData.getCurrentGuessHint() = this.guesses[this.currentLevel - 1]
     private fun GameData.isLastLevel() = this.currentLevel == this.guesses.size

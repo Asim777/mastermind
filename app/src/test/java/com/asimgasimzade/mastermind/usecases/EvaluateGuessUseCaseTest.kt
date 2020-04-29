@@ -191,4 +191,20 @@ class EvaluateGuessUseCaseTest(
         // Then
         Assert.assertEquals(expected, actual)
     }
+
+    @Test
+    fun `Given correct guess and secret when execute then updates isGuessCorrect with true`() {
+        // Given
+        given { areColorInRightPositionUseCase.execute(guessHint, secret) }.willReturn(
+            List(4) {
+                secret[it].color == guessHint.guess[it].color
+            }
+        )
+
+        // When
+        val actual = cut.execute(guessHint, secret)
+
+        // Then
+        Assert.assertEquals(expected, actual)
+    }
 }

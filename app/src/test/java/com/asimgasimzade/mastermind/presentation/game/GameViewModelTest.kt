@@ -54,6 +54,7 @@ class GameViewModelTest {
                 CodePeg(CodePegColor.values()[it])
             },
             numberOfGuesses = 10,
+            gameMode = GameMode.SINGLE_PLAYER,
             currentLevel = 1,
             areDuplicatesAllowed = false,
             areBlanksAllowed = false,

@@ -1,10 +1,7 @@
 package com.asimgasimzade.mastermind.usecases
 
 import com.asimgasimzade.mastermind.data.gamedata.GameDataRepository
-import com.asimgasimzade.mastermind.data.model.CodePeg
-import com.asimgasimzade.mastermind.data.model.CodePegColor
-import com.asimgasimzade.mastermind.data.model.GameData
-import com.asimgasimzade.mastermind.data.model.GuessHintModel
+import com.asimgasimzade.mastermind.data.model.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,6 +28,7 @@ class SaveGameDataUseCaseTest {
                 CodePeg(CodePegColor.values()[it])
             },
             numberOfGuesses = 10,
+            gameMode = GameMode.SINGLE_PLAYER,
             currentLevel = 1,
             areDuplicatesAllowed = false,
             areBlanksAllowed = false,
