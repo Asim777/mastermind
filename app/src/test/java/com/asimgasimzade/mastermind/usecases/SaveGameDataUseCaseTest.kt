@@ -1,11 +1,10 @@
 package com.asimgasimzade.mastermind.usecases
 
 import com.asimgasimzade.mastermind.data.gamedata.GameDataRepository
-import com.asimgasimzade.mastermind.data.gamesettings.GameSettingsRepository
-import com.asimgasimzade.mastermind.data.gamesettings.GameSettingsRepositoryType
-import com.asimgasimzade.mastermind.data.model.*
-import com.nhaarman.mockito_kotlin.given
-import io.reactivex.Single
+import com.asimgasimzade.mastermind.data.model.CodePeg
+import com.asimgasimzade.mastermind.data.model.CodePegColor
+import com.asimgasimzade.mastermind.data.model.GameData
+import com.asimgasimzade.mastermind.data.model.GuessHintModel
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,13 +31,16 @@ class SaveGameDataUseCaseTest {
                 CodePeg(CodePegColor.values()[it])
             },
             numberOfGuesses = 10,
+            currentLevel = 1,
             areDuplicatesAllowed = false,
             areBlanksAllowed = false,
             guesses = MutableList(10) {
                 GuessHintModel(
                     number = (10-it).toString(),
-                    guess = listOf(),
-                    hint = listOf()
+                    guess = arrayOf(),
+                    hint = listOf(),
+                    isCurrentLevel = true,
+                    isGuessCorrect = false
                 )
             }
         )

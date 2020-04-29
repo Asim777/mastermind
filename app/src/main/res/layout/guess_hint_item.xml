@@ -21,23 +21,23 @@
             android:id="@+id/guess_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/hint_container"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="10dp">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/guess_number"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
-                android:paddingRight="5dp"
+                android:paddingStart="5dp"
                 android:text="@{guessHintModel.number + '.'}"
-                android:textSize="40sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/guess_view_peg_1"
@@ -53,11 +53,12 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:contentDescription="@string/secret_view_peg_content_description"
-                android:src="@drawable/ic_empty_peg"
+                app:imageResource="@{guessHintModel.guess[0].color.image}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/guess_view_peg_2"
                 app:layout_constraintStart_toEndOf="@id/guess_number"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_empty_peg" />
 
             <ImageView
                 android:id="@+id/guess_view_peg_2"
@@ -66,11 +67,12 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:contentDescription="@string/secret_view_peg_content_description"
-                android:src="@drawable/ic_empty_peg"
+                app:imageResource="@{guessHintModel.guess[1].color.image}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/guess_view_peg_3"
                 app:layout_constraintStart_toEndOf="@id/guess_view_peg_1"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_empty_peg" />
 
             <ImageView
                 android:id="@+id/guess_view_peg_3"
@@ -79,11 +81,12 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:contentDescription="@string/secret_view_peg_content_description"
-                android:src="@drawable/ic_empty_peg"
+                app:imageResource="@{guessHintModel.guess[2].color.image}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/guess_view_peg_4"
                 app:layout_constraintStart_toEndOf="@id/guess_view_peg_2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_empty_peg" />
 
             <ImageView
                 android:id="@+id/guess_view_peg_4"
@@ -92,18 +95,21 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:contentDescription="@string/secret_view_peg_content_description"
-                android:src="@drawable/ic_empty_peg"
+                app:imageResource="@{guessHintModel.guess[3].color.image}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guess_view_peg_3"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_empty_peg" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/hint_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +124,8 @@
                 android:paddingLeft="3dp"
                 android:paddingTop="3dp"
                 android:paddingRight="3dp"
-                android:src="@drawable/ic_empty_peg"
+                app:imageResource="@{guessHintModel.hint[0].color.image}"
+                tools:src="@drawable/ic_empty_peg"
                 app:layout_constraintBottom_toTopOf="@id/hint_view_peg_3"
                 app:layout_constraintEnd_toStartOf="@id/hint_view_peg_2"
                 app:layout_constraintStart_toStartOf="parent"
@@ -132,7 +139,8 @@
                 android:paddingLeft="3dp"
                 android:paddingTop="3dp"
                 android:paddingRight="3dp"
-                android:src="@drawable/ic_empty_peg"
+                app:imageResource="@{guessHintModel.hint[1].color.image}"
+                tools:src="@drawable/ic_empty_peg"
                 app:layout_constraintBottom_toTopOf="@id/hint_view_peg_4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/hint_view_peg_1"
@@ -146,7 +154,8 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 android:paddingBottom="3dp"
-                android:src="@drawable/ic_empty_peg"
+                app:imageResource="@{guessHintModel.hint[2].color.image}"
+                tools:src="@drawable/ic_empty_peg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/hint_view_peg_4"
                 app:layout_constraintStart_toStartOf="parent"
@@ -160,7 +169,8 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 android:paddingBottom="3dp"
-                android:src="@drawable/ic_empty_peg"
+                app:imageResource="@{guessHintModel.hint[3].color.image}"
+                tools:src="@drawable/ic_empty_peg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/hint_view_peg_3"

@@ -3,6 +3,7 @@ package com.asimgasimzade.mastermind.presentation.base
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.asimgasimzade.mastermind.framework.SchedulerProvider
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -60,4 +61,5 @@ open class BaseViewModel(
     override fun refreshing(): Observable<Boolean> = refreshing.observeOnUiAndHide()
 
     internal fun <T> Observable<T>.observeOnUiAndHide() = observeOn(schedulerProvider.ui()).hide()
+    internal fun Completable.observeOnUiAndHide() = observeOn(schedulerProvider.ui()).hide()
 }

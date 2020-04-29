@@ -54,13 +54,16 @@ class GameViewModelTest {
                 CodePeg(CodePegColor.values()[it])
             },
             numberOfGuesses = 10,
+            currentLevel = 1,
             areDuplicatesAllowed = false,
             areBlanksAllowed = false,
             guesses = MutableList(10) {
                 GuessHintModel(
                     number = (10-it).toString(),
-                    guess = listOf(),
-                    hint = listOf()
+                    guess = arrayOf(),
+                    hint = listOf(),
+                    isCurrentLevel = true,
+                    isGuessCorrect = false
                 )
             }
         )
