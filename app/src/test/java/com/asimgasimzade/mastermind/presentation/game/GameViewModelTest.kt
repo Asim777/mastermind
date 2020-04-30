@@ -3,10 +3,7 @@ package com.asimgasimzade.mastermind.presentation.game
 import android.app.Application
 import com.asimgasimzade.mastermind.data.model.*
 import com.asimgasimzade.mastermind.framework.TestSchedulerProvider
-import com.asimgasimzade.mastermind.usecases.EvaluateGuessUseCase
-import com.asimgasimzade.mastermind.usecases.GenerateSecretUseCase
-import com.asimgasimzade.mastermind.usecases.GetGameSettingsUseCase
-import com.asimgasimzade.mastermind.usecases.SaveGameDataUseCase
+import com.asimgasimzade.mastermind.usecases.*
 import com.nhaarman.mockito_kotlin.given
 import io.reactivex.Single
 import org.junit.Before
@@ -29,6 +26,9 @@ class GameViewModelTest {
     lateinit var generateSecretUseCase: GenerateSecretUseCase
 
     @Mock
+    lateinit var getSavedGameDataUseCase: GetSavedGameDataUseCase
+
+    @Mock
     lateinit var saveGameDataUseCase: SaveGameDataUseCase
 
     @Mock
@@ -41,6 +41,7 @@ class GameViewModelTest {
             TestSchedulerProvider(),
             getGameSettingsUseCase,
             generateSecretUseCase,
+            getSavedGameDataUseCase,
             saveGameDataUseCase,
             evaluateGuessUseCase
         )
@@ -60,13 +61,14 @@ class GameViewModelTest {
             areBlanksAllowed = false,
             guesses = MutableList(10) {
                 GuessHintModel(
-                    number = (10-it).toString(),
+                    number = (10 - it).toString(),
                     guess = arrayOf(),
                     hint = listOf(),
                     isCurrentLevel = true,
                     isGuessCorrect = false
                 )
-            }
+            },
+            currentPlayer = Player.CODE_BREAKER
         )
 
         val expectedGameSettings = GameSettings(
@@ -81,6 +83,8 @@ class GameViewModelTest {
 
         given { generateSecretUseCase.execute(expectedGameSettings.areDuplicatesAllowed) }
             .willReturn(Single.just(expectedSecret))
+
+        given { getSavedGameDataUseCase.execute() }.willReturn(Single.just(null))
 
         val setupUiObserver = cut.setupUi().test()
 

@@ -4,17 +4,23 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 data class GameData(
-    val secret: List<CodePeg>,
+    var secret: List<CodePeg>,
     var numberOfGuesses: Int,
     var gameMode: GameMode,
     var currentLevel: Int,
     var areDuplicatesAllowed: Boolean,
     var areBlanksAllowed: Boolean,
-    var guesses: MutableList<GuessHintModel>
+    var guesses: MutableList<GuessHintModel>,
+    var currentPlayer: Player
 )
 
 @Parcelize
 enum class GameMode: Parcelable {
     SINGLE_PLAYER,
     MULTIPLAYER
+}
+
+enum class Player {
+    CODE_MAKER,
+    CODE_BREAKER
 }

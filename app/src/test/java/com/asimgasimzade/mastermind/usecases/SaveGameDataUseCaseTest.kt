@@ -40,7 +40,8 @@ class SaveGameDataUseCaseTest {
                     isCurrentLevel = true,
                     isGuessCorrect = false
                 )
-            }
+            },
+            currentPlayer = Player.CODE_BREAKER
         )
 
         // When

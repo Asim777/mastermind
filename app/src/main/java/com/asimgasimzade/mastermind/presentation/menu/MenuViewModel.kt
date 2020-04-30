@@ -44,7 +44,7 @@ class MenuViewModel @Inject constructor(
     }
 
     override fun onMultiPlayerClicked() {
-        navigate.onNext(Destination.NewGame)
+        navigate.onNext(Destination.MultiPlayer)
     }
 
     override fun onSettingsClicked() {

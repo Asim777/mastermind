@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="androidx.core.content.ContextCompat" />
+
         <variable
             name="dialogModel"
             type="com.asimgasimzade.mastermind.data.model.DialogModel" />
@@ -22,19 +24,20 @@
             android:layout_height="100dp"
             android:layout_marginTop="30dp"
             android:contentDescription="@string/dialog_image_content_description"
-            android:src="@{dialogModel.drawableResource}"
+            app:imageResource="@{dialogModel.drawableResource}"
             app:layout_constraintBottom_toTopOf="@id/dialog_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_dialog_win" />
 
         <TextView
             android:id="@+id/dialog_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@{dialogModel.title}"
-            android:textColor="@{dialogModel.titleColor}"
+            android:text="@{dialogModel.titleResource}"
+            android:textColor="@{ContextCompat.getColor(context, dialogModel.titleColorResource)}"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/dialog_text"
@@ -48,8 +51,9 @@
             android:id="@+id/dialog_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{dialogModel.text}"
+            android:text="@{dialogModel.textResource}"
             android:textSize="20sp"
+            android:gravity="center"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,15 +65,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
             android:background="#9C27B0"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:layout_marginBottom="20dp"
             android:text="@string/dialog_button_leave"
             android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dialog_text" />
+            app:layout_constraintTop_toBottomOf="@id/dialog_text"
+            app:visible="@{dialogModel.showLeaveButton}" />
+
+        <Button
+            android:id="@+id/dialog_button_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:background="#FF5722"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="@string/dialog_button_start"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_text"
+            app:visible="@{dialogModel.showCloseButton}" />
 
         <Button
             android:id="@+id/dialog_button_play_again"
@@ -84,6 +106,7 @@
             android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dialog_text" />
+            app:layout_constraintTop_toBottomOf="@id/dialog_text"
+            app:visible="@{dialogModel.showPlayAgainButton}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

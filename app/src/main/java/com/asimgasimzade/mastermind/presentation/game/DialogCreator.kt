@@ -20,8 +20,15 @@ class DialogCreator @Inject constructor() {
     fun create(
         context: Context,
         dialogModel: DialogModel,
-        onPlayAgain: () -> Unit = {},
-        onLeave: () -> Unit = {}
+        onPlayAgain: () -> Unit = object : () -> Unit {
+            override fun invoke() {}
+        },
+        onLeave: () -> Unit = object : () -> Unit {
+            override fun invoke() {}
+        },
+        onClose: () -> Unit = object : () -> Unit {
+            override fun invoke() {}
+        }
     ) {
         val inflater = LayoutInflater.from(context)
 
@@ -44,9 +51,18 @@ class DialogCreator @Inject constructor() {
                 onPlayAgain.invoke()
                 dialog.dismiss()
             }
+            binding.root.dialog_button_close.setOnClickListener {
+                onClose.invoke()
+                dialog.setOnDismissListener(null)
+                dialog.dismiss()
+            }
 
-            builder.setCancelable(false)
+            if (!dialogModel.showCloseButton) builder.setCancelable(false)
+
             dialog = builder.show()
+            dialog.setOnDismissListener {
+                onClose.invoke()
+            }
         }
     }
 }

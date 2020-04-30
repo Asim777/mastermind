@@ -27,11 +27,11 @@ class MenuFragment : BaseFragment<MenuViewModel, FragmentMenuBinding>() {
         viewModel.outputs.navigate().subscribe { destination ->
             when (destination) {
                 is MenuViewModel.Companion.Destination.NewGame -> {
-                    val args = getGameSettingsBundle(GameMode.SINGLE_PLAYER)
+                    val args = getGameModeBundle(GameMode.SINGLE_PLAYER)
                     navigateTo(R.id.goToGameFragmentFromMenu, args)
                 }
                 is MenuViewModel.Companion.Destination.MultiPlayer -> {
-                    val args = getGameSettingsBundle(GameMode.MULTIPLAYER)
+                    val args = getGameModeBundle(GameMode.MULTIPLAYER)
                     navigateTo(R.id.goToGameFragmentFromMenu, args)
                 }
                 is MenuViewModel.Companion.Destination.Settings ->
@@ -66,7 +66,7 @@ class MenuFragment : BaseFragment<MenuViewModel, FragmentMenuBinding>() {
         }.addTo(subscriptions)
     }
 
-    private fun getGameSettingsBundle(gameMode: GameMode): Bundle =
+    private fun getGameModeBundle(gameMode: GameMode): Bundle =
         Bundle().apply {
             putParcelable(
                 GAME_MODE_KEY,

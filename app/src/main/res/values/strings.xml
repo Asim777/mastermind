@@ -13,6 +13,8 @@
     <!-- GAME -->
     <string name="secret_view_peg_content_description">Secret view peg place</string>
     <string name="check_button_text">Check</string>
+    <string name="action_button_text_check">Check</string>
+    <string name="action_button_text_hide_secret">Hide secret</string>
 
     <!-- DIALOG -->
     <string name="dialog_image_content_description">Dialog image</string>
@@ -22,4 +24,9 @@
     <string name="lost_dialog_text">Try again. You will do better next time!</string>
     <string name="win_dialog_title">You Won!</string>
     <string name="win_dialog_text">You are a true Mastermind!</string>
+    <string name="code_maker_dialog_title">Code Maker</string>
+    <string name="code_breaker_dialog_title">Code Breaker</string>
+    <string name="code_maker_dialog_text">Create a code by dragging code pegs into secret holes. Don\'t let code breaker to see the code. Click \"Hide Secret\" when ready.</string>
+    <string name="code_breaker_dialog_text">Try to find the secret by dragging code pegs into guessing holes. Click \"Check\" to get hints.</string>
+    <string name="dialog_button_start">Start</string>
 </resources>

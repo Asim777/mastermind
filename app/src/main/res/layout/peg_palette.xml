@@ -123,7 +123,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/palette_check_button"
+        android:id="@+id/palette_action_button"
         android:text="@string/check_button_text"
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"

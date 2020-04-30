@@ -1,10 +1,11 @@
 package com.asimgasimzade.mastermind.data.model
 
-import android.graphics.drawable.Drawable
-
 data class DialogModel(
-    val drawableResource: Drawable?,
-    val title: String,
-    val titleColor: Int,
-    val text: String
+    val drawableResource: Int,
+    val titleResource: Int,
+    val titleColorResource: Int,
+    val textResource: Int,
+    val showLeaveButton: Boolean,
+    val showPlayAgainButton: Boolean,
+    val showCloseButton: Boolean
 )

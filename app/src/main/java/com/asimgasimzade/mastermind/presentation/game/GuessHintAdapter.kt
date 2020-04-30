@@ -26,7 +26,10 @@ class GuessHintAdapter :
 
     private var guessHintsList = mutableListOf<GuessHintModel>()
 
+    private lateinit var guessPegViewsList: List<View>
+
     val onCodePegAdded = PublishSubject.create<Pair<CodePeg, Int>>()
+    var disableCodePlaces = false
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
@@ -50,43 +53,50 @@ class GuessHintAdapter :
     override fun getItemCount() = guessHintsList.size
 
     override fun onBindViewHolder(holder: GuessHintHolder, position: Int) {
-
-        val guessPegViewsList = listOf(
+        guessPegViewsList = listOf(
             holder.itemView.guess_view_peg_1,
             holder.itemView.guess_view_peg_2,
             holder.itemView.guess_view_peg_3,
             holder.itemView.guess_view_peg_4
         )
-
         if (guessHintsList[position].isCurrentLevel) {
-            val dragListener = View.OnDragListener { view, dragEvent ->
-                when (dragEvent.action) {
-                    DragEvent.ACTION_DRAG_ENDED -> true
-                    DragEvent.ACTION_DRAG_ENTERED -> true
-                    DragEvent.ACTION_DRAG_EXITED -> true
-                    DragEvent.ACTION_DRAG_LOCATION -> true
-                    DragEvent.ACTION_DRAG_STARTED -> true
-                    DragEvent.ACTION_DROP -> {
-                        if (view is ImageView) {
-                            handleDropAction(view, dragEvent)
-                            true
-                        } else false
-                    }
-                    else -> false
-                }
-            }
-
-            guessPegViewsList.forEachIndexed { guessPegPosition, guessPegView ->
-                guessPegView.setOnDragListener(dragListener)
-                guessPegView.tag = guessPegPosition
-            }
+            setDragListeners(holder)
         } else {
-            guessPegViewsList.forEach { guessPegView ->
-                guessPegView.setOnDragListener(null)
-            }
+            removeDragListeners()
         }
 
         holder.bind(guessHintsList[position])
+    }
+
+    private fun setDragListeners(holder: GuessHintHolder) {
+
+        val dragListener = View.OnDragListener { view, dragEvent ->
+            when (dragEvent.action) {
+                DragEvent.ACTION_DRAG_ENDED -> true
+                DragEvent.ACTION_DRAG_ENTERED -> true
+                DragEvent.ACTION_DRAG_EXITED -> true
+                DragEvent.ACTION_DRAG_LOCATION -> true
+                DragEvent.ACTION_DRAG_STARTED -> true
+                DragEvent.ACTION_DROP -> {
+                    if (view is ImageView && !disableCodePlaces) {
+                        handleDropAction(view, dragEvent)
+                        true
+                    } else false
+                }
+                else -> false
+            }
+        }
+
+        guessPegViewsList.forEachIndexed { guessPegPosition, guessPegView ->
+            guessPegView.setOnDragListener(dragListener)
+            guessPegView.tag = guessPegPosition
+        }
+    }
+
+    private fun removeDragListeners() {
+        guessPegViewsList.forEach { guessPegView ->
+            guessPegView.setOnDragListener(null)
+        }
     }
 
     private fun handleDropAction(view: View, dragEvent: DragEvent) {
