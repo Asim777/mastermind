@@ -25,6 +25,7 @@ class GuessHintAdapter :
     private val subscriptions = CompositeDisposable()
 
     private var guessHintsList = mutableListOf<GuessHintModel>()
+
     val onCodePegAdded = PublishSubject.create<Pair<CodePeg, Int>>()
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
@@ -34,7 +35,6 @@ class GuessHintAdapter :
 
     override fun setData(data: List<GuessHintModel>) {
         guessHintsList = data.toList().reversed().toMutableList()
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -93,7 +93,10 @@ class GuessHintAdapter :
         when (dragEvent.clipData.getItemAt(0).text.toString()) {
             CodePegColor.BLUE.name -> callOnCodePegAddedCallback(view, CodePeg(CodePegColor.BLUE))
             CodePegColor.GREEN.name -> callOnCodePegAddedCallback(view, CodePeg(CodePegColor.GREEN))
-            CodePegColor.YELLOW.name -> callOnCodePegAddedCallback(view, CodePeg(CodePegColor.YELLOW))
+            CodePegColor.YELLOW.name -> callOnCodePegAddedCallback(
+                view,
+                CodePeg(CodePegColor.YELLOW)
+            )
             CodePegColor.RED.name -> callOnCodePegAddedCallback(view, CodePeg(CodePegColor.RED))
             CodePegColor.WHITE.name -> callOnCodePegAddedCallback(view, CodePeg(CodePegColor.WHITE))
             CodePegColor.BLACK.name -> callOnCodePegAddedCallback(view, CodePeg(CodePegColor.BLACK))

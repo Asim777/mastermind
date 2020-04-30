@@ -23,7 +23,8 @@ interface GameViewModelInputs : BaseViewModelInputs {
 
 interface GameViewModelOutputs : BaseViewModelOutputs {
     fun setupUi(): Observable<GameData>
-    fun updateGuessHint(): Observable<GameData>
+    fun updateCurrentLevel(): Observable<Pair<GameData, Int>>
+    fun updateNewLevel(): Observable<Pair<GameData, Int>>
     fun enableCheckButton(): Observable<Boolean>
     fun showWinDialog(): Observable<Unit>
     fun showLostDialog(): Observable<Unit>
@@ -49,7 +50,8 @@ class GameViewModel @Inject constructor(
         get() = this
 
     private val setupUi = PublishSubject.create<GameData>()
-    private val updateGuessHint = PublishSubject.create<GameData>()
+    private val updateCurrentLevel = PublishSubject.create<Pair<GameData, Int>>()
+    private val updateNewLevel = PublishSubject.create<Pair<GameData, Int>>()
     private val enableCheckButton = PublishSubject.create<Boolean>()
     private val showWinDialog = PublishSubject.create<Unit>()
     private val showLostDialog = PublishSubject.create<Unit>()
@@ -89,7 +91,7 @@ class GameViewModel @Inject constructor(
 
     override fun onPegAdded(addedPeg: CodePeg, position: Int) {
         gameData.getCurrentGuessHint().guess[position] = addedPeg
-        updateGuessHint.onNext(gameData)
+        updateCurrentLevel.onNext(gameData to gameData.guesses.size - gameData.currentLevel)
         updateCheckButtonStatus()
     }
 
@@ -123,8 +125,9 @@ class GameViewModel @Inject constructor(
             } else {
                 gameData.guesses[gameData.currentLevel - 1] = guessHint
                 gameData.guesses[gameData.currentLevel].isCurrentLevel = true
-                updateGuessHint.onNext(gameData)
+                updateCurrentLevel.onNext(gameData to gameData.guesses.size - gameData.currentLevel)
                 gameData.currentLevel++
+                updateNewLevel.onNext(gameData to gameData.guesses.size - gameData.currentLevel)
                 updateCheckButtonStatus()
             }
         }
@@ -198,7 +201,8 @@ class GameViewModel @Inject constructor(
     }
 
     override fun setupUi(): Observable<GameData> = setupUi.observeOnUiAndHide()
-    override fun updateGuessHint(): Observable<GameData> = updateGuessHint.observeOnUiAndHide()
+    override fun updateCurrentLevel(): Observable<Pair<GameData, Int>> = updateCurrentLevel.observeOnUiAndHide()
+    override fun updateNewLevel(): Observable<Pair<GameData, Int>> = updateNewLevel.observeOnUiAndHide()
     override fun enableCheckButton(): Observable<Boolean> = enableCheckButton.observeOnUiAndHide()
     override fun showWinDialog(): Observable<Unit> = showWinDialog.observeOnUiAndHide()
     override fun showLostDialog(): Observable<Unit> = showLostDialog.observeOnUiAndHide()

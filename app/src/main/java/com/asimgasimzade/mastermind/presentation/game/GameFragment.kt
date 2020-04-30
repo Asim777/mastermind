@@ -54,8 +54,12 @@ class GameFragment : BaseFragment<GameViewModel, FragmentGameBinding>() {
             .subscribe(::setupUi)
             .addTo(subscriptions)
 
-        viewModel.outputs.updateGuessHint()
-            .subscribe(::updateGuessHint)
+        viewModel.outputs.updateCurrentLevel()
+            .subscribe(::updateLevel)
+            .addTo(subscriptions)
+
+        viewModel.outputs.updateNewLevel()
+            .subscribe(::updateLevel)
             .addTo(subscriptions)
 
         viewModel.enableCheckButton()
@@ -115,11 +119,15 @@ class GameFragment : BaseFragment<GameViewModel, FragmentGameBinding>() {
     private fun setupUi(gameData: GameData) {
         binding.guessHintRecyclerView.adapter = guessHintAdapter
         binding.setVariable(BR.gameModel, gameData)
+        guessHintAdapter.notifyDataSetChanged()
         binding.guessHintRecyclerView.scrollToPosition(gameData.guesses.size - 1)
     }
 
-    private fun updateGuessHint(gameData: GameData) {
+    private fun updateLevel(gameDataAndPosition: Pair<GameData, Int>) {
+        val gameData = gameDataAndPosition.first
+        val position = gameDataAndPosition.second
         binding.setVariable(BR.gameModel, gameData)
+        guessHintAdapter.notifyItemChanged(position)
     }
 
     private fun enableCheckButton(isEnabled: Boolean) {
