@@ -1,4 +1,5 @@
-# mastermind
+#Mastermind
+
 Mastermind board game - Android implementation
 Built for interview challenge
 
@@ -9,7 +10,8 @@ In order to build and run you will need:
 Build the project in Android Studio and deploy on emulator or real device. 
 If there is any problems with build, you can alternatively deploy apk and aab files that you can find in root folder
 
-Project is built using Cleen Architectural Pattern and separation of functionality into different layers -
+Project is built using Cleen Architectural Pattern and SOLID principles. 
+Separation of functionality into different layers (each layer implemented as package inside the same module) -
 1. Data
 2. Domain
 3. Framework
@@ -19,5 +21,6 @@ Project is built using Cleen Architectural Pattern and separation of functionali
 Dependencies are provided by Dependency Injection by Dagger. 
 Saving data on device implemented via SharedPreferences 
 Usecases and viewmodels are tested via Unit tests
+Data is provided to views via data binding  
 Functionality includes Single Player and Multiplayer mode
 Settings screen and How to play screen are planned but not implemented due to time constraints.
