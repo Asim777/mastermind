@@ -75,14 +75,19 @@ class EvaluateGuessUseCaseTest(
             )
         )
 
-        private fun getCorrectSecret(): List<CodePeg> {
-            return listOf(
-                CodePeg(CodePegColor.WHITE),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.RED),
-                CodePeg(CodePegColor.GREEN)
-            )
-        }
+        private fun getCorrectSecret() = arrayOf(
+            CodePeg(CodePegColor.WHITE),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.RED),
+            CodePeg(CodePegColor.GREEN)
+        )
+
+        private fun getIncorrectSecret() = arrayOf(
+            CodePeg(CodePegColor.BLUE),
+            CodePeg(CodePegColor.GREEN),
+            CodePeg(CodePegColor.WHITE),
+            CodePeg(CodePegColor.RED)
+        )
 
         private fun getCombinationOfWrongGuessAndSecret() = listOf(
             arrayOf(
@@ -150,8 +155,8 @@ class EvaluateGuessUseCaseTest(
                         CodePeg(CodePegColor.YELLOW)
                     ),
                     hint = listOf(
-                        KeyPeg(KeyPegValue.RED),
                         KeyPeg(KeyPegValue.WHITE),
+                        KeyPeg(KeyPegValue.RED),
                         KeyPeg(KeyPegValue.EMPTY),
                         KeyPeg(KeyPegValue.EMPTY)
                     ),
@@ -160,15 +165,6 @@ class EvaluateGuessUseCaseTest(
                 )
             )
         )
-
-        private fun getIncorrectSecret(): List<CodePeg> {
-            return listOf(
-                CodePeg(CodePegColor.BLUE),
-                CodePeg(CodePegColor.GREEN),
-                CodePeg(CodePegColor.WHITE),
-                CodePeg(CodePegColor.RED)
-            )
-        }
     }
 
     @Before

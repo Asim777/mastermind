@@ -96,11 +96,17 @@ class GameViewModelTest {
         given { generateSecretUseCase.execute(expectedGameSettings.areDuplicatesAllowed) }
             .willReturn(Single.just(expectedSecret))
 
-        given { getSavedGameDataUseCase.execute() }.willReturn(Single.just(null))
+        given { getIsNewGameUseCase.execute() }.willReturn(Single.just(true))
+
+        given {
+            setupGameUseCase.execute(GameMode.SINGLE_PLAYER, Array(4) {
+                CodePeg(CodePegColor.values()[it])
+            })
+        }.willReturn(Single.just(expectedGameModel))
 
         val setupUiObserver = cut.setupUi().test()
 
-        // Whend
+        // When
         cut.onLoad(gameMode = GameMode.SINGLE_PLAYER)
 
         // Then

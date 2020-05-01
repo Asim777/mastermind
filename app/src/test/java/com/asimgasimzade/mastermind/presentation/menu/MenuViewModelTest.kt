@@ -2,8 +2,8 @@ package com.asimgasimzade.mastermind.presentation.menu
 
 import android.app.Application
 import com.asimgasimzade.mastermind.framework.TestSchedulerProvider
-import com.asimgasimzade.mastermind.usecases.GetGameSettingsUseCase
 import com.asimgasimzade.mastermind.presentation.menu.MenuViewModel.Companion.Destination
+import com.asimgasimzade.mastermind.usecases.GetGameSettingsUseCase
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,7 +47,7 @@ class MenuViewModelTest {
     @Test
     fun `When onMultiPlayerClicked then navigate to Game`() {
         // Given
-        val expectedDestination = Destination.NewGame
+        val expectedDestination = Destination.MultiPlayer
         val navigateObserver = cut.navigate().test()
 
         // When

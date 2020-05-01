@@ -37,22 +37,22 @@ class AreColorsInRightPositionUseCaseTest(
             arrayOf(
                 getGuessHintModel(getGuessWithOneRightColor()),
                 getSecretWithNoDuplicates(),
-                listOf(true, false, false, false)
+                arrayOf(true, false, false, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithTwoRightColors()),
                 getSecretWithNoDuplicates(),
-                listOf(true, true, false, false)
+                arrayOf(true, true, false, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithThreeRightColors()),
                 getSecretWithNoDuplicates(),
-                listOf(true, true, true, false)
+                arrayOf(true, true, true, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithFourRightColors()),
                 getSecretWithNoDuplicates(),
-                listOf(true, true, true, true)
+                arrayOf(true, true, true, true)
             )
         )
 
@@ -60,22 +60,22 @@ class AreColorsInRightPositionUseCaseTest(
             arrayOf(
                 getGuessHintModel(getGuessWithOneRightColor()),
                 getSecretWithDuplicates(),
-                listOf(true, false, false, false)
+                arrayOf(true, false, false, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithTwoRightColors()),
                 getSecretWithDuplicates(),
-                listOf(true, true, false, false)
+                arrayOf(true, true, false, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithThreeRightColors()),
                 getSecretWithDuplicates(),
-                listOf(true, true, true, false)
+                arrayOf(true, true, true, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithFourRightColorsDuplicate()),
                 getSecretWithDuplicates(),
-                listOf(true, true, true, true)
+                arrayOf(true, true, true, true)
             )
         )
 
@@ -83,22 +83,22 @@ class AreColorsInRightPositionUseCaseTest(
             arrayOf(
                 getGuessHintModel(getGuessWithOneRightColor()),
                 getSecretWithNoMatches(),
-                listOf(false, false, false, false)
+                arrayOf(false, false, false, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithTwoRightColors()),
                 getSecretWithNoMatches(),
-                listOf(false, false, false, false)
+                arrayOf(false, false, false, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithThreeRightColors()),
                 getSecretWithNoMatches(),
-                listOf(false, false, false, false)
+                arrayOf(false, false, false, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithFourRightColors()),
                 getSecretWithNoMatches(),
-                listOf(false, false, false, false)
+                arrayOf(false, false, false, false)
             )
         )
 
@@ -106,100 +106,87 @@ class AreColorsInRightPositionUseCaseTest(
             arrayOf(
                 getGuessHintModel(getGuessWithOneRightColor()),
                 getSecretWithBlanks(),
-                listOf(false, false, true ,false)
+                arrayOf(false, false, true, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithTwoRightColors()),
                 getSecretWithBlanks(),
-                listOf(false, false, true ,false)
+                arrayOf(false, false, true, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithThreeRightColors()),
                 getSecretWithBlanks(),
-                listOf(false, false, false ,false)
+                arrayOf(false, false, false, false)
             ),
             arrayOf(
                 getGuessHintModel(getGuessWithFourRightColors()),
                 getSecretWithBlanks(),
-                listOf(false, false, false ,false)
+                arrayOf(false, false, false, false)
             )
         )
 
-        private fun getSecretWithNoDuplicates(): List<CodePeg> {
-            return listOf(
-                CodePeg(CodePegColor.WHITE),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.RED),
-                CodePeg(CodePegColor.GREEN)
-            )
-        }
+        private fun getSecretWithNoDuplicates() = arrayOf(
+            CodePeg(CodePegColor.WHITE),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.RED),
+            CodePeg(CodePegColor.GREEN)
+        )
 
-        private fun getSecretWithDuplicates(): List<CodePeg> {
-            return listOf(
-                CodePeg(CodePegColor.WHITE),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.RED),
-                CodePeg(CodePegColor.WHITE)
-            )
-        }
+        private fun getSecretWithDuplicates() = arrayOf(
+            CodePeg(CodePegColor.WHITE),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.RED),
+            CodePeg(CodePegColor.WHITE)
+        )
 
-        private fun getSecretWithNoMatches(): List<CodePeg> {
-            return listOf(
-                CodePeg(CodePegColor.YELLOW),
-                CodePeg(CodePegColor.BLUE),
-                CodePeg(CodePegColor.PINK),
-                CodePeg(CodePegColor.BLUE)
-            )
-        }
+        private fun getSecretWithNoMatches() = arrayOf(
+            CodePeg(CodePegColor.YELLOW),
+            CodePeg(CodePegColor.BLUE),
+            CodePeg(CodePegColor.PINK),
+            CodePeg(CodePegColor.BLUE)
+        )
 
-        private fun getSecretWithBlanks(): List<CodePeg> {
-            return listOf(
-                CodePeg(CodePegColor.YELLOW),
-                CodePeg(CodePegColor.EMPTY),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.EMPTY)
-            )
-        }
+        private fun getSecretWithBlanks() = arrayOf(
+            CodePeg(CodePegColor.YELLOW),
+            CodePeg(CodePegColor.EMPTY),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.EMPTY)
+        )
 
-        private fun getGuessWithOneRightColor() =
-            arrayOf(
-                CodePeg(CodePegColor.WHITE),
-                CodePeg(CodePegColor.GREEN),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.RED)
-            )
+        private fun getGuessWithOneRightColor() = arrayOf(
+            CodePeg(CodePegColor.WHITE),
+            CodePeg(CodePegColor.GREEN),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.RED)
+        )
 
-        private fun getGuessWithTwoRightColors() =
-            arrayOf(
-                CodePeg(CodePegColor.WHITE),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.RED)
-            )
+        private fun getGuessWithTwoRightColors() = arrayOf(
+            CodePeg(CodePegColor.WHITE),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.RED)
+        )
 
-        private fun getGuessWithThreeRightColors() =
-            arrayOf(
-                CodePeg(CodePegColor.WHITE),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.RED),
-                CodePeg(CodePegColor.RED)
-            )
+        private fun getGuessWithThreeRightColors() = arrayOf(
+            CodePeg(CodePegColor.WHITE),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.RED),
+            CodePeg(CodePegColor.RED)
+        )
 
-        private fun getGuessWithFourRightColors() =
-            arrayOf(
-                CodePeg(CodePegColor.WHITE),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.RED),
-                CodePeg(CodePegColor.GREEN)
-            )
+        private fun getGuessWithFourRightColors() = arrayOf(
+            CodePeg(CodePegColor.WHITE),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.RED),
+            CodePeg(CodePegColor.GREEN)
+        )
 
-        private fun getGuessWithFourRightColorsDuplicate() =
-            arrayOf(
-                CodePeg(CodePegColor.WHITE),
-                CodePeg(CodePegColor.BLACK),
-                CodePeg(CodePegColor.RED),
-                CodePeg(CodePegColor.WHITE)
-            )
+        private fun getGuessWithFourRightColorsDuplicate() = arrayOf(
+            CodePeg(CodePegColor.WHITE),
+            CodePeg(CodePegColor.BLACK),
+            CodePeg(CodePegColor.RED),
+            CodePeg(CodePegColor.WHITE)
+        )
 
         private fun getGuessHintModel(guess: Array<CodePeg>): GuessHintModel {
             return GuessHintModel(
